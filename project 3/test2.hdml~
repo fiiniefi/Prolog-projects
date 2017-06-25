@@ -1,3 +1,0 @@
-def c(b) = ( if c<5 
-then c=5 
-else c=3 )

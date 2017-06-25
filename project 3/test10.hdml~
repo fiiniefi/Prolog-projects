@@ -1,5 +1,0 @@
-def a(b) = if a=b
-    then
-    let a=c
-    else
-    don't let a=c
