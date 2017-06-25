@@ -1,0 +1,4 @@
+def a+b(b+a) =
+    if a
+    then let a=b in []
+    else a=a+b(a<=b)

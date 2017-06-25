@@ -1,0 +1,36 @@
+def fun1(a,b,c,d) = 
+    if let c=d in [] 
+    then c=d 
+    else -fun(a) @ ( if a <= b 
+    then a <=b 
+    else a<=b)
+
+def fun2(_,c,_) = 
+    let (c) = 
+    let (b) =
+    let de = 4 in 5
+    #bg[ 6[if b=a 
+    then b=a 
+    else a=b .. 5]] 
+    in if c^4 
+    then 1 
+    else 0  (* let(b) = *)
+    ulubiona_liczba_wszystkich_matematykow = ( takiegoprzypisanianiktsieniespodziewal )
+    in fun2(5) (* let(((a))) = *)
+
+def fun3(a,b,c,d,e,f) = 
+    if let a=3 in [b+c+d+e+f] 
+    then fun3(fun3(1)) 
+    else fun3(fun3(2))
+
+def fun4(a) =
+    let a,b,_ = a<>b  in  if b >= a
+    then a=b
+    else let a,b = a<>b  in  if b >= a
+    then a=b
+    else let a = a in []
+
+def fun5(_,_,_) =
+    let _ = -a / -b in
+    let _ = a+b-c*d in
+    let _ = a,b,c,d in fun5(a)[a&b]

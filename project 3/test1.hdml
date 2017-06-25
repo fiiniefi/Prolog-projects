@@ -1,0 +1,13 @@
+def fun1(a,b) = 
+    if let a=b in [] 
+    then a=b 
+    else -fun(a) @ ( if a <= b then a <=b else a<=b)
+
+def fun2(_) = 
+    let (((a))) = 
+    let (b) =
+    let c = 4 in 5
+    #b[ 6[if b=a then b=a else a=b .. 5]] 
+    in if c^4 then 1 else 0  (* let(b) = *)
+    ulubiona_liczba_wszystkich_matematykow = ( takiegoprzypisanianiktsieniespodziewal )
+    in fun2(5) (* let(((a))) = *)

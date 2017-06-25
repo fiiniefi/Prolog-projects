@@ -1,0 +1,111 @@
+:- module(wiktor_garbarek_tests, [tests/3]).
+
+tests(empty_program, input(""), program([])).
+tests(invalid, input("def main()"), no).
+tests(adder, file('adder.hdml'), yes).
+tests(srcpos, input("def main(_) = 1"), program([def(main, wildcard(file(test, 1, 10, 9, 1)), num(no, 1))])).
+
+tests(nested_comment, input("def elsefun(a, b, c) = (* (* *) zagniezdzam komentarze *) a @ a * b * c"), yes).
+tests(nested_comment_with_code_inside, input("(* (* caly program to komentarz *) def z_zagniezdzeniem(_) = if a @ b then b @ 2 else ~(a @ 2) *)"), program([])).
+tests(incorrect_identifier, input("def white space(a, _) = if a * a @ 5 + 2 then a <> 5 else a <> 5"), no).
+tests(empty_identifier, input("def  (a, b) = a * b"), no).
+tests(wrong_comment, input("(* begin *) def g(_) = (* a = b (* comment *) a @ b"), no).
+tests(wrong_argument, input("def funf() = 5"), no).
+tests(comment_in_beginning, input("(* a beginning comment explaining what function does *) def funfun(a,b) = let c = a <= b in [ ]"), yes).
+tests(instruction_from_other_lang, input("def from_other_lang(a, b, c) = let b = c in a, return a"), no).
+tests(multiple_definitons, input("def a(_) = 1 def b(_) = 2 def c(_) = 3"), program([def(a, wildcard(no), num(no, 1)), def(b, wildcard(no), num(no, 2)), def(c, wildcard(no), num(no, 3))])).
+tests(parsing_identifiers, input("def f(A, a, a42, _, A42) = a42 * A42"), program([def(f, pair(no, var(no, 'A'), pair(no, var(no, 'a'), pair(no, var(no, 'a42'), pair(no, wildcard(no), var(no, 'A42'))))), op(no, '*', var(no, 'a42'), var(no, 'A42')))])).
+tests(unended_comment, input("def func(A, b) = A * b * A % 2 (* something"), no).
+tests(some_parentheses, input("def indef((a, b), c) = (((if a = b then c = 0 else c = 1)[let (a,(b,c)) = b & c @ a in let (b,c) = b <> c in [b @ c]])), (a = a * b * c)"), yes).
+tests(other_trick, input("def main(A) = (B ^ C)"), yes).
+tests(tricks, input("def main(_) = (if a then b else c)[ a ]"), yes).
+tests(trick, input("def main(_) = (a, b, c)[a .. b]"), yes).
+tests(more_tricks, input("def main(_) = [][ a ][b .. c][d]"), yes).
+tests(and_more_parentheses, input("def definition(a, (b, _)) = if ([([([x = 5])])]) then a & @ 2 * b ^ 3 else b - a / 2"), yes).
+tests(non_trivial_parentheses, input("def parentheses(a, ((b)), _, (((c)))) = a + b*c, c + b, a + c"), yes).
+tests(good_priorities, input("def arithmetic(_) = if 5 + 2 + 1 * 10 <= 2 / 7 + 3 then 2 + 2 * 2 else 5 % 10 & 2 + 3"), program([def(arithmetic, wildcard(no), if(no, op(no, '<=', op(no, '+', op(no, '+', num(no, 5), num(no, 2)), op(no, '*', num(no, 1), num(no, 10))), op(no, '+', op(no, '/', num(no, 2), num(no, 7)), num(no, 3))), op(no, '+', num(no, 2), op(no, '*', num(no, 2), num(no, 2)) ), op(no, '+', op(no, '%', num(no, 5), op(no, '&', num(no, 10), num(no, 2))), num(no, 3)) ) )])).
+tests(good_associativity, input("def arith3(a) = 2 + 2 * 2 = 6"), program([def(arith3, var(no, 'a'), op(no, '=', op(no, '+', num(no, 2), op(no, '*', num(no, 2), num(no, 2))), num(no, 6) ) )])).
+tests(non_trivial_associativity, input("def arith2(x) = 2 @ 2 @ x"), program([def(arith2, var(no, 'x'), op(no, '@', num(no, 2), op(no, '@', num(no,2), var(no, 'x'))))])).
+tests(expression_as_argument, input("def ident(if a then b else c) = a @ b, a * 2"), no).
+tests(keywords_as_argument, input("def function(a, _, b, then, c) = a <> 2"), no).
+tests(gag_program_keywords_problem, input("def f(_) = if if = then then then = else else else = if"), no).
+tests(function_calling, input("def factorial(a) = if a = 1 then 1 else a * factorial(a - 1) "), yes).
+tests(identifier_starting_with_keyword, file('identifier_starting_with_keyword.hdml'), yes).
+tests(using_empty_vector, file('empty_vector.hdml'), yes).
+tests(some_of_tests_merged_wrong_argument, file('some_of_tests_merged.hdml'), no).
+tests(trick_with_nonassociative_op, input("def main(_) = a <> b <> c"), no).
+tests(bit, input("def main(_) = [ a2 ]"), program([def(main, wildcard(no), bit(no, var(no, a2)) )])).
+tests(bitsel, input("def main(A) = A1 [ A2 ]"), yes).
+tests(bitsel2, input("def main(A) = A1 [ A2 .. A3]"), yes).
+tests(wrong_bitsel, input("def main(A) = [A2 .. A3]"), no).
+tests(f_calling, input("def main(A) = main2(A-1, b, c)"), yes).
+tests(weird_name, input("def _cos'_co(_) = x"), yes).
+tests(weird_name_2, input("def '''cos(_) = x"), no).
+tests(bronikowski_test, input("def main(A) = [0]"), yes).
+
+tests(basic_test, file('test.hdml'), yes).
+tests(empty_program, input(""), program([])).
+tests(invalid, input("def main()"), no).
+tests(adder, file('adder.hdml'), yes).
+tests(srcpos, input("def main(_) = 1"),
+  program([def(main, wildcard(file(test, 1, 10, 9, 1)), num(no, 1))])).
+tests(lets_try_to_comment_all, input("(*def wrong_program (*X = wrong*) wro(*ng (*^ wrong*) *)"), no).
+tests(invalid_comment,file('adderwithcomments.hdml'),no).
+tests(correct_definition,file('program1.hdml'),yes).
+tests(corr_definition,file('program2.hdml'),yes).
+tests(correct_program,file('program3.hdml'),yes).
+tests(tests_with_program,file('program4.hdml'),program([def(add, pair(no, var(no, 'a'),pair(no,wildcard(no),var(no,'B'))), op(no, '+', var(no, 'a'), var(no, 'B')))])).
+% factorial - [100, 101, 102, 32, 102, 97, 99, 116, 111, 114, 105, 97, 108, 40, 97, 41, 32, 61, 32, 105, 102, 32, 97, 32, 61, 32, 49, 32, 116, 104, 101, 110, 32, 49, 32, 101, 108, 115, 101, 32, 97, 32, 42, 32, 102, 97, 99, 116, 111, 114, 105, 97, 108, 40, 97, 32, 45, 32, 49, 41]
+
+
+tests(missing_parenthesis, input("def func(arg = let arg=N in N"), no).
+tests(missing_else, input("def func(_)= if x > 0 then y = 5"),no).
+tests(redundant_comma, input("def func(_)=func2(arg1,arg2,)"),no).
+tests(operator_doesnt_exist, input("def func(_)=8=<10"),no).
+tests(missing_word_in, input("def func(_)=let var = 5"),no).
+tests(missing_expression, input("def func(_)= let var = 5 in "),no).
+tests(incomplete_func_def, input("def func(arg1,arg2)="),no).
+tests(double_div_operator, input("def func(_)= 3//8"),no).
+tests(c_style_assignment, input("def func(_) = var = 5"),yes).	
+
+tests(weird_but_correct, input("def main(_) = if if A then B else C then D else E"),yes).
+tests(definition_of_func_with_wildcard, input("def func(_)= JAN "),yes).
+tests(multiplication_of_neg_numbers, input("def main(_) = -3*-6"),yes).
+tests(three_minuses, input("def func(_)= if 5---8 =-3 then true else false"), yes).
+
+% FIX chars numbers
+tests(pair, input("def func(_) = A,2"),
+		program([def(func,wildcard(file(test,1,10,9,1)),pair(file(test,1,15,14,3),var(file(test,1,15,14,1),'A'),num(file(test,1,17,16,1),2)))])).
+% 2 is 2 or '2' in num?
+
+tests(function, input("def func(_,[])=42"), no).
+
+tests(condition, input("def func(_)=if X>0 then A else B"),
+		program([def(func,wildcard(no),if(no,op(no,'>',var(no,'X'),num(no,0)),
+						var(no,'A'),
+						var(no,'B')))])).
+
+tests(let_test, input("def func(_) = let C2,S2=half_adder(S1,C) in C1,S2"),
+		program([def(func,wildcard(no),let(no,pair(no,var(no,'C2'),var(no,'S2')),
+						call(no,half_adder,pair(no,var(no,'S1'),var(no,'C'))),
+						pair(no,var(no,'C1'),var(no,'S2'))))])).
+
+tests(binary_and_unary_minuses, input("def func(_) = 5--3"), yes).
+
+tests(empty,input("[]"),no).
+tests(empty2,input(" \n\t(*komentarz*)"),yes).
+
+tests(bitsel, input("def func(_) = A[B]"),program([def(func,wildcard(no),bitsel(no,var(no,'A'),var(no,'B')))])).
+
+tests(greater_equal, input("def func(_) = 8+2^3*4>=10%3"), yes).
+
+tests(func_call_with_4_parameters, input("def func1(_) = func(A,B,C,D)"),
+		program([def(func1,wildcard(no),call(no,func,pair(no,var(no,'A'),pair(no,var(no,'B'),pair(no,var(no,'C'),var(no,'D'))))))])).
+
+tests(sum_of_few_elements, input("def func(_) = 1+2+3+4+5"),
+		program([def(func,wildcard(no),op(no,'+',op(no,'+',op(no,'+',op(no,'+',num(no,1),num(no,2)),num(no,3)),num(no,4)),num(no,5)))])).
+
+%def full_adder(A, B, C) =
+%  let C1, S1 = half_adder(A, B) in
+%  let C2, S2 = half_adder(S1, C) in
+%  C1|C2, S2
